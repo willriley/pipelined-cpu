@@ -12,7 +12,6 @@ module ex_pipeline_regs(input clk,
 						input in_mem_wrenable,
 						input in_mem_to_reg,
 						output reg [4:0] out_pc,
-						output reg out_halt,
 						output reg [31:0] out_rd1,
 						output reg [31:0] out_rd2,
 						output reg [31:0] out_imm,
@@ -25,7 +24,6 @@ module ex_pipeline_regs(input clk,
 						output reg out_mem_to_reg);
 						
 initial begin
-	out_halt = 0;
 	out_jmp_type = 0;
 	out_reg_wrenable = 0;
 	out_mem_wrenable = 0;
@@ -35,7 +33,6 @@ end
 // between the instruction fetch and execution stages	
 always @(posedge clk) begin
 	out_pc <= in_pc;
-	out_halt <= in_halt;
 	out_rd1 <= in_rd1;
 	out_rd2 <= in_rd2;
 	out_imm <= in_imm;

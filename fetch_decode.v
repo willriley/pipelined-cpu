@@ -13,25 +13,29 @@ module fetch_decode(input clk,
 				  output mem_wrenable,
 				  output mem_to_reg,
 				  output alu_src,
-				  output halt,
 				  output [4:0] alu_op,
 				  output reg [4:0] pc);
 
 // instruction fetch and decode stage
 // fetches the instruction + generates control signals/operands	
 	
-reg halt;
+reg halt_reg;
+wire halt;
 initial begin
 	pc = 0;
-	halt = 0;
+	halt_reg = 0;
 end	
 
 // update pc
 always @(posedge clk) begin
-	if (halt) pc <= pc;
+	if (halt_reg) pc <= pc;
 	else begin
 		pc <= should_jump ? jump_pc : pc + 1'b1;
 	end
+end
+
+always @(posedge clk) begin
+	halt_reg <= halt_reg || halt;
 end
 
 // fetch instr
