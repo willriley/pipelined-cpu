@@ -1,5 +1,4 @@
 module ex(input [4:0] in_pc,
-			input halt,
 			input [31:0] rd1,
 			input [31:0] rd2,
 			input [31:0] imm,

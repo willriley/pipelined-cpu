@@ -1,6 +1,5 @@
 module ex_pipeline_regs(input clk,
 						input [4:0] in_pc,
-						input in_halt,
 						input [31:0] in_rd1,
 						input [31:0] in_rd2,
 						input [31:0] in_imm,
