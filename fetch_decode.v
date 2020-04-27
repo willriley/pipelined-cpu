@@ -57,6 +57,6 @@ assign out_write_reg = instr[11:7];
 control_unit ctrl(.instr(instr), .imm(imm), .halt(halt),
 						.reg_wrenable(out_reg_wrenable), .mem_wrenable(mem_wrenable),
 						.mem_to_reg(mem_to_reg), .jump_type(jump_type),
-						.alu_src(alu_src), alu_op(alu_op), 
+						.alu_src(alu_src), .alu_op(alu_op));
 
 endmodule

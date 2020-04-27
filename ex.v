@@ -22,10 +22,10 @@ alu alu(.opc(alu_op), .op1(rd1),
 
 // out_pc = alu_res if jump_type == jalr
 //        = in_pc + imm otherwise
-assign out_pc = in_jump_type[1:0] == 2'b11 ? alu_res : in_pc + imm[4:0];
+assign out_pc = jump_type[1:0] == 2'b11 ? alu_res[4:0] : in_pc + imm[4:0];
 
 // write_data = in_pc + 1 if jal/jalr
 // 			  = rd2 otherwise
-assign write_data = in_jump_type[1] ? in_pc + 1'b1 : rd2;
+assign write_data = jump_type[1] ? in_pc + 1'b1 : rd2;
 
 endmodule

@@ -25,6 +25,7 @@ assign out_write_data = mem_to_reg ? mem_res : alu_res;
 always @* begin
 	if (jump_type[2]) begin 
 		// if jump type is a branch, check alu_res
+		// TODO: double check this expression
 		should_jump = jump_type[1] ~^ alu_res;
 	end
 	else begin

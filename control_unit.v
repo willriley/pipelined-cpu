@@ -36,6 +36,7 @@ always @* begin
 	alu_src = 1'b0;
 	alu_op = 5'd0;
 	jump_type = 4'd0;
+	mem_to_reg = 1'b0;
 	
 	case (instr[6:0])
 	HALT: halt = 1'b1;
