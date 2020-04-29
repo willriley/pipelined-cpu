@@ -4,8 +4,8 @@ module regfile(input clk,
 					input [4:0] write_reg,
 					input [31:0] write_data,
 					input write_enable,
-					output [31:0] read_data1,
-					output [31:0] read_data2);
+					output reg [31:0] read_data1,
+					output reg [31:0] read_data2);
 
 reg [31:0] regs[0:31]; // 32x32 bit array
 initial begin
@@ -20,9 +20,19 @@ always @(posedge clk) begin
 	end
 end
 
-// TODO: assign on negative edge?
-assign read_data1 = regs[read_reg1];
-assign read_data2 = regs[read_reg2];
+always @* begin
+	if (write_enable && read_reg1 == write_reg) begin
+		read_data1 = write_data;
+	end
+	else read_data1 = regs[read_reg1];
+end
+
+always @* begin
+	if (write_enable && read_reg2 == write_reg) begin
+		read_data2 = write_data;
+	end
+	else read_data2 = regs[read_reg2];
+end
 
 endmodule
 

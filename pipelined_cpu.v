@@ -1,7 +1,8 @@
 module pipelined_cpu(input CLOCK_50);
 
 wire [4:0] fd_out_write_reg, fd_alu_op, fd_pc;
-wire should_jump, fd_reg_wrenable, fd_out_reg_wrenable;
+wire [4:0] mem_pc, mem_write_reg;
+wire should_jump, fd_reg_wrenable, fd_out_reg_wrenable, mem_reg_wrenable;
 wire fd_mem_wrenable, fd_alu_src, fd_mem_to_reg;
 wire [31:0] fd_write_data, fd_rd1, fd_rd2, fd_imm, reg_write_data;
 wire [3:0] fd_jump_type;
@@ -39,10 +40,9 @@ ex ex_stage(ex_in_pc, ex_in_rd1, ex_in_rd2, ex_in_imm, ex_in_alu_src,
 		ex_in_write_reg, ex_in_mem_wrenable, ex_in_mem_to_reg, 
 		ex_out_pc, ex_alu_res, ex_write_data);
 
-wire [4:0] mem_pc, mem_write_reg;
 wire [31:0] mem_alu_res, mem_write_data;
 wire [2:0] mem_jump_type;
-wire mem_reg_wrenable, mem_mem_wrenable, mem_mem_to_reg;
+wire mem_mem_wrenable, mem_mem_to_reg;
 
 mem_pipeline_regs mpr(CLOCK_50, ex_out_pc, ex_alu_res, ex_write_data,
 							ex_in_jmp_type, ex_in_reg_wrenable, ex_in_write_reg,

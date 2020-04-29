@@ -40,7 +40,8 @@ end
 
 // fetch instr
 wire [31:0] instr;
-rom instr_rom(pc, clk, instr);
+instruction_rom rom(pc, instr);
+//rom instr_rom(pc, clk, instr);
 
 // handle simultaneous reg reads/writes
 wire [4:0] rr1, rr2;

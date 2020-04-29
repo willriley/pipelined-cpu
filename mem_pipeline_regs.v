@@ -15,7 +15,13 @@ module mem_pipeline_regs(input clk,
 								output reg [4:0] out_write_reg,
 								output reg out_mem_wrenable,
 								output reg out_mem_to_reg);
-								
+
+initial begin
+	out_pc = 0;
+	out_reg_wrenable = 0;
+	out_jump_type = 0;
+end		
+		
 always @(posedge clk) begin
 	out_pc <= in_pc;
 	out_alu_res <= in_alu_res;
