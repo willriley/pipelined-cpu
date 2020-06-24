@@ -39,9 +39,10 @@ always @(posedge clk) begin
 end
 
 // fetch instr
-wire [31:0] instr;
-instruction_rom rom(pc, instr);
-//rom instr_rom(pc, clk, instr);
+wire [31:0] raw_instr, instr;
+instruction_rom rom(pc, raw_instr);
+// TODO: make compatible with regular rom
+// rom instr_rom(pc, clk, instr);
 
 // handle simultaneous reg reads/writes
 wire [4:0] rr1, rr2;
@@ -51,7 +52,9 @@ regfile rf(clk, rr1, rr2, in_write_reg, write_data,
 assign rr1 = instr[19:15];
 assign rr2 = instr[24:20];
 assign out_write_reg = instr[11:7];
-			  
+
+// put nop into pipeline if we're halted
+assign instr = halt_reg ? 32'h00000013 : raw_instr;			  
 			  
 // instantiate control unit that
 // sets control flags and generates imm
