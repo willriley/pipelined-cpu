@@ -18,18 +18,17 @@ always @* begin
 	case (addr)
 	5'd0: instr = 32'h00800293; // prog 2
 	5'd1: instr = 32'h00f00313;
-	5'd2: instr = 32'h0062a023;
-	5'd3: instr = 32'h00000013; // RAW hazard after instr 2
-	5'd4: instr = 32'h00000013; // so 3 + 4 need to be nops for now
-	5'd5: instr = 32'h005303b3; 
-	5'd6: instr = 32'h40530e33; 
-	5'd7: instr = 32'h03c384b3; 
-	5'd8: instr = 32'h00428293; 
-	5'd9: instr = 32'hffc2a903;
-	5'd10: instr = 32'h41248933;
-	5'd11: instr = 32'h00291913;
-	5'd12: instr = 32'h0122a023;
-	default: instr = 32'hffff_ffff; // halt
+	5'd4: instr = 32'h0062a023;
+	5'd7: instr = 32'h005303b3; 
+	5'd8: instr = 32'h40530e33; 
+	5'd10: instr = 32'h03c384b3; 
+	5'd11: instr = 32'h00428293; 
+	5'd14: instr = 32'hffc2a903;
+	5'd17: instr = 32'h41248933;
+	5'd20: instr = 32'h00291913;
+	5'd23: instr = 32'h0122a023;
+	5'd24: instr = 32'hffff_ffff; // halt
+	default: instr = 32'h00000013;
 	endcase
 end
 
