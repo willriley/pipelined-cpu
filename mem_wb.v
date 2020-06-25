@@ -1,5 +1,5 @@
 module mem_wb(input clk,
-				input [4:0] pc,
+				input [4:0] pc, 
 				input [31:0] alu_res,
 				input [31:0] write_data,
 				input [2:0] jump_type,
