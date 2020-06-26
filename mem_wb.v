@@ -17,7 +17,7 @@ initial begin
 end
 				
 // TODO:	phase shift mem clock?
-ram ram(.address(alu_res[7:0]), .clock(clk), .data(write_data),
+ram ram(.address(alu_res[7:0]), .clock(~clk), .data(write_data),
 			.wren(mem_wrenable), .q(mem_res));
 			
 assign out_write_data = mem_to_reg ? mem_res : alu_res;
