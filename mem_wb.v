@@ -16,8 +16,10 @@ initial begin
 	should_jump = 0;
 end
 				
-// TODO:	phase shift mem clock?
-ram ram(.address(alu_res[7:0]), .clock(~clk), .data(write_data),
+wire mem_clk, mem_clk_rst;
+pll pll(clk, mem_clk_rst, mem_clk);		
+				
+ram ram(.address(alu_res[7:0]), .clock(mem_clk), .data(write_data),
 			.wren(mem_wrenable), .q(mem_res));
 			
 assign out_write_data = mem_to_reg ? mem_res : alu_res;
