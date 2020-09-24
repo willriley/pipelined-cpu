@@ -6,6 +6,8 @@ module fetch_decode(input clk,
 				  input in_reg_wrenable,
 				  output [31:0] read_data1,
 				  output [31:0] read_data2,
+				  //output [4:0] rr1,
+				  //output [4:0] rr2,
 				  output [31:0] imm,
 				  output [4:0] out_write_reg,
 				  output out_reg_wrenable,
@@ -48,7 +50,7 @@ instruction_rom rom(pc, raw_instr);
 wire [4:0] rr1, rr2;
 regfile rf(clk, rr1, rr2, in_write_reg, write_data, 
 			  in_reg_wrenable, read_data1, read_data2);
-			  
+
 assign rr1 = instr[19:15];
 assign rr2 = instr[24:20];
 assign out_write_reg = instr[11:7];
