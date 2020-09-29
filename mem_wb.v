@@ -17,12 +17,17 @@ initial begin
 end
 				
 wire mem_clk, mem_clk_rst;
+assign mem_clk_rst = 0;
+
 pll pll(clk, mem_clk_rst, mem_clk);		
 				
 ram ram(.address(alu_res[7:0]), .clock(mem_clk), .data(write_data),
 			.wren(mem_wrenable), .q(mem_res));
-			
-assign out_write_data = mem_to_reg ? mem_res : alu_res;
+
+// write data = pc + 1 if should_jump
+//            = mem contents if LW
+//            = alu_res otherwise			
+assign out_write_data = should_jump ? write_data : (mem_to_reg ? mem_res : alu_res);
 
 always @* begin
 	if (jump_type[2]) begin 

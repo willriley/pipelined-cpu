@@ -34,8 +34,8 @@ module instruction_rom(input [4:0] addr, output reg [31:0] instr);
 
 always @* begin
 	case (addr)
-	5'd0: instr = 32'h00600513;
-	5'd1: instr = 32'h00c000ef;
+	5'd0: instr = 32'h00400513; // changed to 4!
+	5'd1: instr = 32'h014000ef;
 	5'd4: instr = 32'h00a02023; // double-check this jump
 	5'd5: instr = 32'hffffffff; // halt 
 	5'd6: instr = 32'hff810113; 
