@@ -32,7 +32,10 @@ end
 always @(posedge clk) begin
 	if (halt_reg) pc <= pc;
 	else begin
-		pc <= should_jump ? jump_pc : pc + 1'b1;
+//		pc <= should_jump ? jump_pc : pc + 1'b1;
+		if (should_jump) pc <= jump_pc;
+		else if (pc < 5'd31) pc <= pc + 1'b1;
+		else pc <= pc;
 	end
 end
 
