@@ -30,11 +30,13 @@ ram ram(.address(alu_res[7:0]), .clock(mem_clk), .data(write_data),
 assign out_write_data = should_jump ? write_data : (mem_to_reg ? mem_res : alu_res);
 
 always @* begin
+	// beq jump_type is 100
+	// bne is 110
+	// jalr and jal are both 001
 	if (jump_type[2]) begin 
-		// if jump type is a branch, check alu_res
 		// bne -> alu_res != 0
 		// beq -> alu_res == 0
-		should_jump = (jump_type[1] && alu_res) || (jump_type[1] && !alu_res);
+		should_jump = (jump_type[1] && alu_res) || (!jump_type[1] && !alu_res);
 	end
 	else begin
 		should_jump = jump_type[0];

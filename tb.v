@@ -5,7 +5,7 @@ reg clk;
 pipelined_cpu cpu(clk);
 
 initial begin
-	clk = 0;
+	clk = 1'b0;
 
 	#20000;
 	$stop;
