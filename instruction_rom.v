@@ -35,24 +35,24 @@ module instruction_rom(input [4:0] addr, output reg [31:0] instr);
 always @* begin
 	case (addr)
 	5'd0: instr = 32'h00500513;  // addi a0,x0,6
-	5'd1: instr = 32'h014000ef;  // jal ra,fact
-	5'd4: instr = 32'h00a02023;  // sw a0,0(x0)
-	5'd5: instr = 32'hffffffff;  // halt 
-	5'd6: instr = 32'hff810113;  // fact: addi sp,sp,-8
-	5'd9: instr = 32'h00112223;  // sw ra, 4(sp)
-	5'd10: instr = 32'h00a12023; // sw a0, 0(sp)
-	5'd11: instr = 32'hfff50513; // addi a0,a0,-1 
-	5'd14: instr = 32'h02051063; // bne a0,x0,else 
-	5'd17: instr = 32'h00100513; // addi a0,x0,1 
-	5'd18: instr = 32'h00810113; // addi sp,sp,8 
-	5'd19: instr = 32'h00008067; // jalr x0,0(ra) 
-	5'd22: instr = 32'hfc1ff0ef; // else: jal ra,fact 
-	5'd25: instr = 32'h00050293; // addi t0,a0,0 
-	5'd26: instr = 32'h00012503; // lw a0,0(sp) 
-	5'd27: instr = 32'h00412083; // lw ra,4(sp) 
-	5'd28: instr = 32'h00810113; // addi sp,sp,8  
-	5'd29: instr = 32'h02550533; // mul a0,a0,t0 
-	5'd30: instr = 32'h00008067; // jalr x0,0(ra) 
+	5'd1: instr = 32'h00c000ef;  // jal ra,fact
+	5'd2: instr = 32'h00a02023;  // sw a0,0(x0)
+	5'd3: instr = 32'hffffffff;  // halt 
+	5'd4: instr = 32'hff810113;  // fact: addi sp,sp,-8
+	5'd7: instr = 32'h00112223;  // sw ra, 4(sp)
+	5'd8: instr = 32'h00a12023;  // sw a0, 0(sp)
+	5'd9: instr = 32'hfff50513;  // addi a0,a0,-1 
+	5'd12: instr = 32'h00051863; // bne a0,x0,else 
+	5'd13: instr = 32'h00100513; // addi a0,x0,1 
+	5'd14: instr = 32'h00810113; // addi sp,sp,8 
+	5'd15: instr = 32'h00008067; // jalr x0,0(ra) 
+	5'd16: instr = 32'hfd1ff0ef; // else: jal ra,fact 
+	5'd17: instr = 32'h00050293; // addi t0,a0,0 
+	5'd18: instr = 32'h00012503; // lw a0,0(sp) 
+	5'd19: instr = 32'h00412083; // lw ra,4(sp) 
+	5'd20: instr = 32'h00810113; // addi sp,sp,8  
+	5'd21: instr = 32'h02550533; // mul a0,a0,t0 
+	5'd22: instr = 32'h00008067; // jalr x0,0(ra) 
 	default: instr = 32'h00000013; // nop
 	endcase
 end
