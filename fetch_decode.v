@@ -1,17 +1,13 @@
 module fetch_decode(input clk,
-				  input [4:0] jump_pc,
-				  input should_jump,
 				  input [4:0] in_write_reg,
 				  input [31:0] write_data,
 				  input in_reg_wrenable,
 				  output [31:0] read_data1,
 				  output [31:0] read_data2,
-				  //output [4:0] rr1,
-				  //output [4:0] rr2,
 				  output [31:0] imm,
 				  output [4:0] out_write_reg,
 				  output out_reg_wrenable,
-				  output [3:0] jump_type,
+				  output is_jump,
 				  output mem_wrenable,
 				  output mem_to_reg,
 				  output alu_src,
@@ -22,20 +18,36 @@ module fetch_decode(input clk,
 // fetches the instruction + generates control signals/operands	
 	
 reg halt_reg;
-wire halt;
+reg [31:0] num_cycles;
+wire halt, rs_equal, should_branch;
+wire [3:0] jump_type;
 initial begin
 	pc = 0;
 	halt_reg = 0;
-end	
+	num_cycles = 0;
+end
+
+assign rs_equal = (read_data1 == read_data2);
+assign is_jump = jump_type[1];
+
+// branch on beq when rs1 == rs2
+// branch on bne when rs1 != rs2
+assign should_branch = (jump_type[2] && ((rs_equal && !jump_type[3]) || (!rs_equal && jump_type[3])));
 
 // update pc
 always @(posedge clk) begin
-	if (halt_reg) pc <= pc;
+	if (halt_reg) begin
+		pc <= pc;
+		num_cycles <= num_cycles;
+	end 
 	else begin
-//		pc <= should_jump ? jump_pc : pc + 1'b1;
-		if (should_jump) pc <= jump_pc;
-		else if (pc < 5'd31) pc <= pc + 1'b1;
-		else pc <= pc;
+		num_cycles <= num_cycles + 1'b1;
+		// jal -> pc = pc + imm
+		// jalr -> pc = rd1
+		// beq/bne -> pc = pc + imm if taken
+		// else pc = pc + 1
+		if (jump_type[1]) pc <= jump_type[0] ? read_data1 : pc + imm;
+		else pc <= (jump_type[2] && should_branch) ? pc + imm : pc + 1'b1;
 	end
 end
 

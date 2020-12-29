@@ -5,7 +5,7 @@ module ex_pipeline_regs(input clk,
 						input [31:0] in_imm,
 						input in_alu_src,
 						input [4:0] in_alu_op,
-						input [3:0] in_jmp_type,
+						input in_is_jump,
 						input in_reg_wrenable,
 						input [4:0] in_write_reg,
 						input in_mem_wrenable,
@@ -16,14 +16,14 @@ module ex_pipeline_regs(input clk,
 						output reg [31:0] out_imm,
 						output reg out_alu_src,
 						output reg [4:0] out_alu_op,
-						output reg [3:0] out_jmp_type,
+						output reg out_is_jump,
 						output reg out_reg_wrenable,
 						output reg [4:0] out_write_reg,
 						output reg out_mem_wrenable,
 						output reg out_mem_to_reg);
 						
 initial begin
-	out_jmp_type = 0;
+	out_is_jump = 0;
 	out_reg_wrenable = 0;
 	out_mem_wrenable = 0;
 end
@@ -37,7 +37,7 @@ always @(posedge clk) begin
 	out_imm <= in_imm;
 	out_alu_src <= in_alu_src;
 	out_alu_op <= in_alu_op;
-	out_jmp_type <= in_jmp_type;
+	out_is_jump <= in_is_jump;
 	out_reg_wrenable <= in_reg_wrenable;
 	out_write_reg <= in_write_reg;
 	out_mem_wrenable <= in_mem_wrenable;
