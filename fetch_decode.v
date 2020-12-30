@@ -5,6 +5,8 @@ module fetch_decode(input clk,
 				  output [31:0] read_data1,
 				  output [31:0] read_data2,
 				  output [31:0] imm,
+				  output [4:0] out_rs1,
+				  output [4:0] out_rs2,
 				  output [4:0] out_write_reg,
 				  output out_reg_wrenable,
 				  output is_jump,
@@ -46,8 +48,8 @@ always @(posedge clk) begin
 		// jalr -> pc = rd1
 		// beq/bne -> pc = pc + imm if taken
 		// else pc = pc + 1
-		if (jump_type[1]) pc <= jump_type[0] ? read_data1 : pc + imm;
-		else pc <= (jump_type[2] && should_branch) ? pc + imm : pc + 1'b1;
+		if (jump_type[1]) pc <= jump_type[0] ? read_data1[4:0] : pc + imm[4:0];
+		else pc <= (jump_type[2] && should_branch) ? pc + imm[4:0] : pc + 1'b1;
 	end
 end
 
@@ -62,12 +64,11 @@ instruction_rom rom(pc, raw_instr);
 // rom instr_rom(pc, clk, instr);
 
 // handle simultaneous reg reads/writes
-wire [4:0] rr1, rr2;
-regfile rf(clk, rr1, rr2, in_write_reg, write_data, 
+regfile rf(clk, out_rs1, out_rs2, in_write_reg, write_data, 
 			  in_reg_wrenable, read_data1, read_data2);
 
-assign rr1 = instr[19:15];
-assign rr2 = instr[24:20];
+assign out_rs1 = instr[19:15];
+assign out_rs2 = instr[24:20];
 assign out_write_reg = instr[11:7];
 
 // put nop into pipeline if we're halted
