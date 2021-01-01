@@ -34,8 +34,7 @@ wire fwd_a, fwd_b;
 // execute stage						
 ex ex_stage(ex_in_pc, ex_in_rd1, ex_in_rd2, ex_in_imm, 
 		mem_alu_res, ex_in_alu_src, fwd_a, fwd_b,
-		ex_in_alu_op, ex_is_jump, ex_in_reg_wrenable,
-		ex_in_write_reg, ex_in_mem_wrenable, ex_in_mem_to_reg, 
+		ex_in_alu_op, ex_is_jump,
 		ex_alu_res, ex_write_data);
 
 wire [31:0] mem_alu_res, mem_write_data;
@@ -51,7 +50,7 @@ mem_pipeline_regs mpr(CLOCK_50, ex_alu_res, ex_write_data,
 forward_unit fw(ex_in_rs1, ex_in_rs2, mem_write_reg, mem_reg_wrenable, fwd_a, fwd_b);
 							
 mem_wb mem_wb(CLOCK_50, mem_alu_res, mem_write_data, mem_is_jump,
-				mem_reg_wrenable, mem_mem_wrenable, mem_write_reg, mem_mem_to_reg,
+				mem_reg_wrenable, mem_mem_wrenable, mem_mem_to_reg,
 				reg_write_data);
 							
 

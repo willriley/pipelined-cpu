@@ -8,10 +8,6 @@ module ex(input [4:0] in_pc,
 			input fwd_b,
 			input [4:0] alu_op,
 			input is_jump,
-			input reg_wrenable,
-			input [4:0] write_reg,
-			input mem_wrenable,
-			input mem_to_reg,
 			output [31:0] alu_res,
 			output [31:0] write_data);
 

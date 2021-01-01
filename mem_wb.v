@@ -4,7 +4,6 @@ module mem_wb(input clk,
 				input is_jump,
 				input reg_wrenable,
 				input mem_wrenable,
-				input [4:0] write_reg,
 				input mem_to_reg,
 				output [31:0] out_write_data);
 				
