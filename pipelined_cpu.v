@@ -33,7 +33,7 @@ ex_pipeline_regs exp(.clk(CLOCK_50), .in_pc(fd_pc), .in_rs1(fd_rs1), .in_rs2(fd_
 						.out_write_reg(ex_in_write_reg),
 						.out_mem_wrenable(ex_in_mem_wrenable), .out_mem_to_reg(ex_in_mem_to_reg));
 
-wire [31:0] ex_alu_res, ex_write_data;
+wire [31:0] ex_alu_res, ex_write_data, mem_alu_res, mem_write_data;
 wire fwd_a, fwd_b;
 						
 // execute stage						
@@ -42,7 +42,6 @@ ex ex_stage(.in_pc(ex_in_pc), .rd1(ex_in_rd1), .rd2(ex_in_rd2), .imm(ex_in_imm),
 				.alu_op(ex_in_alu_op), .is_jump(ex_is_jump),
 				.alu_res(ex_alu_res), .write_data(ex_write_data));
 
-wire [31:0] mem_alu_res, mem_write_data;
 wire mem_is_jump;
 wire mem_mem_wrenable, mem_mem_to_reg;
 

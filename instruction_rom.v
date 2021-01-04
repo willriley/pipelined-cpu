@@ -34,7 +34,7 @@ module instruction_rom(input [4:0] addr, output reg [31:0] instr);
 
 always @* begin
 	case (addr)
-	5'd0: instr = 32'h00500513;  // addi a0,x0,6
+	5'd0: instr = 32'h00500513;  // addi a0,x0,5
 	5'd1: instr = 32'h00c000ef;  // jal ra,fact
 	5'd2: instr = 32'h00a02023;  // sw a0,0(x0)
 	5'd3: instr = 32'hffffffff;  // halt 
