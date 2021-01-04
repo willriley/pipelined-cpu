@@ -11,7 +11,7 @@ wire [31:0] mem_res;
 wire mem_clk, mem_clk_rst;
 assign mem_clk_rst = 0;
 
-pll pll(clk, mem_clk_rst, mem_clk);		
+pll pll(.refclk(clk), .rst(mem_clk_rst), .outclk_0(mem_clk));		
 				
 ram ram(.address(alu_res[7:0]), .clock(mem_clk), .data(write_data),
 			.wren(mem_wrenable), .q(mem_res));
