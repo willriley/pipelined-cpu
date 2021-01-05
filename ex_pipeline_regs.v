@@ -12,6 +12,9 @@ module ex_pipeline_regs(input clk,
 						input [4:0] in_write_reg,
 						input in_mem_wrenable,
 						input in_mem_to_reg,
+						input in_fwd_a,
+						input in_fwd_b,
+						input should_stall,
 						output reg [4:0] out_pc,
 						output reg [4:0] out_rs1,
 						output reg [4:0] out_rs2,
@@ -24,7 +27,9 @@ module ex_pipeline_regs(input clk,
 						output reg out_reg_wrenable,
 						output reg [4:0] out_write_reg,
 						output reg out_mem_wrenable,
-						output reg out_mem_to_reg);
+						output reg out_mem_to_reg,
+						output reg out_fwd_a,
+						output reg out_fwd_b);
 						
 initial begin
 	out_is_jump = 0;
@@ -32,6 +37,8 @@ initial begin
 	out_mem_wrenable = 0;
 	out_rs1 = 0;
 	out_rs2 = 0;
+	out_fwd_a = 0;
+	out_fwd_b = 0;
 end
 
 // naive module that buffers input/control signals		
@@ -46,10 +53,12 @@ always @(posedge clk) begin
 	out_alu_src <= in_alu_src;
 	out_alu_op <= in_alu_op;
 	out_is_jump <= in_is_jump;
-	out_reg_wrenable <= in_reg_wrenable;
+	out_fwd_a <= in_fwd_a;
+	out_fwd_b <= in_fwd_b;
+	out_reg_wrenable <= should_stall ? 1'b0 : in_reg_wrenable;
 	out_write_reg <= in_write_reg;
-	out_mem_wrenable <= in_mem_wrenable;
-	out_mem_to_reg <= in_mem_to_reg;
+	out_mem_wrenable <= should_stall ? 1'b0 : in_mem_wrenable;
+	out_mem_to_reg <= should_stall ? 1'b0 : in_mem_to_reg;
 end						
 
 endmodule

@@ -4,6 +4,7 @@ wire [4:0] fd_out_write_reg, fd_alu_op, fd_pc, fd_rs1, fd_rs2;
 wire [4:0] mem_write_reg;
 wire should_jump, fd_reg_wrenable, fd_out_reg_wrenable, mem_reg_wrenable;
 wire fd_mem_wrenable, fd_alu_src, fd_mem_to_reg, fd_is_jump;
+wire fwd_a, fwd_b, should_stall;
 wire [31:0] fd_write_data, fd_rd1, fd_rd2, fd_imm, reg_write_data;
 
 // instruction fetch/decode stage
@@ -14,11 +15,12 @@ fetch_decode stage1(.clk(CLOCK_50), .in_write_reg(mem_write_reg),
 						.out_write_reg(fd_out_write_reg), .out_reg_wrenable(fd_out_reg_wrenable), 
 						.is_jump(fd_is_jump), .mem_wrenable(fd_mem_wrenable), 
 						.mem_to_reg(fd_mem_to_reg), .alu_src(fd_alu_src), 
-						.alu_op(fd_alu_op), .pc(fd_pc));
+						.alu_op(fd_alu_op), .pc(fd_pc), .should_stall(should_stall));
 
 wire [4:0] ex_in_pc, ex_in_alu_op, ex_in_write_reg, ex_in_rs1, ex_in_rs2;
 wire [31:0] ex_in_rd1, ex_in_rd2, ex_in_imm;
 wire ex_in_alu_src, ex_in_reg_wrenable, ex_in_mem_wrenable, ex_in_mem_to_reg, ex_is_jump;
+wire ex_in_fwd_a, ex_in_fwd_b;
 
 // pipeline regs between instruction decode and execute stages
 ex_pipeline_regs exp(.clk(CLOCK_50), .in_pc(fd_pc), .in_rs1(fd_rs1), .in_rs2(fd_rs2), 
@@ -30,15 +32,15 @@ ex_pipeline_regs exp(.clk(CLOCK_50), .in_pc(fd_pc), .in_rs1(fd_rs1), .in_rs2(fd_
 						.out_rd1(ex_in_rd1), .out_rd2(ex_in_rd2), .out_imm(ex_in_imm),
 						.out_alu_src(ex_in_alu_src), .out_alu_op(ex_in_alu_op), 
 						.out_is_jump(ex_is_jump), .out_reg_wrenable(ex_in_reg_wrenable), 
-						.out_write_reg(ex_in_write_reg),
-						.out_mem_wrenable(ex_in_mem_wrenable), .out_mem_to_reg(ex_in_mem_to_reg));
+						.out_write_reg(ex_in_write_reg), .out_mem_wrenable(ex_in_mem_wrenable), 
+						.out_mem_to_reg(ex_in_mem_to_reg), .should_stall(should_stall),
+						.in_fwd_a(fwd_a), .in_fwd_b(fwd_b), .out_fwd_a(ex_in_fwd_a), .out_fwd_b(ex_in_fwd_b));
 
 wire [31:0] ex_alu_res, ex_write_data, mem_alu_res, mem_write_data;
-wire fwd_a, fwd_b;
 						
 // execute stage						
 ex ex_stage(.in_pc(ex_in_pc), .rd1(ex_in_rd1), .rd2(ex_in_rd2), .imm(ex_in_imm), 
-				.fwd_res(mem_alu_res), .alu_src(ex_in_alu_src), .fwd_a(fwd_a), .fwd_b(fwd_b),
+				.fwd_res(mem_alu_res), .alu_src(ex_in_alu_src), .fwd_a(ex_in_fwd_a), .fwd_b(ex_in_fwd_b),
 				.alu_op(ex_in_alu_op), .is_jump(ex_is_jump),
 				.alu_res(ex_alu_res), .write_data(ex_write_data));
 
@@ -54,8 +56,9 @@ mem_pipeline_regs mpr(.clk(CLOCK_50), .in_alu_res(ex_alu_res),
 							.out_write_reg(mem_write_reg), .out_mem_wrenable(mem_mem_wrenable), 
 							.out_mem_to_reg(mem_mem_to_reg));
 							
-forward_unit fw(.ex_rs1(ex_in_rs1), .ex_rs2(ex_in_rs2), .mem_rd(mem_write_reg), 
-					 .mem_reg_wrenable(mem_reg_wrenable), .fwd_a(fwd_a), .fwd_b(fwd_b));
+hazard_unit hz(.fd_rs1(fd_rs1), .fd_rs2(fd_rs2), .ex_rd(ex_in_write_reg), 
+					 .ex_reg_wrenable(ex_in_reg_wrenable), .ex_mem_to_reg(ex_in_mem_to_reg), 
+					 .fwd_a(fwd_a), .fwd_b(fwd_b), .should_stall(should_stall));
 							
 mem_wb mem_wb(.clk(CLOCK_50), .alu_res(mem_alu_res), .write_data(mem_write_data), 
 				  .is_jump(mem_is_jump), .reg_wrenable(mem_reg_wrenable), 

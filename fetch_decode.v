@@ -2,6 +2,7 @@ module fetch_decode(input clk,
 				  input [4:0] in_write_reg,
 				  input [31:0] write_data,
 				  input in_reg_wrenable,
+				  input should_stall,
 				  output [31:0] read_data1,
 				  output [31:0] read_data2,
 				  output [31:0] imm,
@@ -38,7 +39,7 @@ assign should_branch = (jump_type[2] && ((rs_equal && !jump_type[3]) || (!rs_equ
 
 // update pc
 always @(posedge clk) begin
-	if (halt_reg) begin
+	if (halt_reg || should_stall) begin
 		pc <= pc;
 		num_cycles <= num_cycles;
 	end 
