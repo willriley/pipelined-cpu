@@ -10,6 +10,14 @@ module hazard_unit(input [4:0] fd_rs1,
 assign fwd_a = (ex_reg_wrenable && ex_rd != 5'd0 && ex_rd == fd_rs1);
 assign fwd_b = (ex_reg_wrenable && ex_rd != 5'd0 && ex_rd == fd_rs2);
 
-assign should_stall = (ex_mem_to_reg && ex_rd != 5'd0 && (ex_rd == fd_rs1 || ex_rd == fd_rs2));
+//initial begin
+//	should_stall = 0;
+//end
+
+//always @(posedge clk) begin
+//	should_stall <= ((ex_mem_to_reg == 1'b1) && (ex_rd != 5'd0) && ((ex_rd == fd_rs1) || (ex_rd == fd_rs2)));
+//end
+
+assign should_stall = ((ex_mem_to_reg == 1'b1) && (ex_rd != 5'd0) && ((ex_rd == fd_rs1) || (ex_rd == fd_rs2)));
 
 endmodule

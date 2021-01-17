@@ -33,6 +33,7 @@ module ex_pipeline_regs(input clk,
 						
 initial begin
 	out_is_jump = 0;
+	out_write_reg = 4'd0;
 	out_reg_wrenable = 0;
 	out_mem_wrenable = 0;
 	out_rs1 = 0;
