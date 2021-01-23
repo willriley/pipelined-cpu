@@ -6,6 +6,6 @@ TODO
 
 ### Improvements
 * Add more test programs
-* Use Altera RAM module instead of a custom module for programs. (Probably need to switch to 4-stage with separate fetch/decode stages)
+* Use Altera RAM module instead of a custom module for instruction mem. (Probably need to switch to 4-stage with separate fetch/decode stages)
 * Add branch prediction
 * Add caching
